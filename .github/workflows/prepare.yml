@@ -1,4 +1,3 @@
-
 name: Preparar codigo recuperado
 
 on:
@@ -10,28 +9,29 @@ permissions:
 jobs:
   extract:
     runs-on: ubuntu-latest
-
     steps:
       - name: Baixar repositorio
         uses: actions/checkout@v4
+        with:
+          ref: offline-rebuild
 
-      - name: Extrair codigo
+      - name: Extrair codigo recuperado
         run: |
           mkdir -p extracted
           unzip -q dualnback_recovered_sources.zip -d extracted
-
           cp -R extracted/recovered-src/. .
-
           cp extracted/RECOVERY_NOTES.md ./RECOVERY_NOTES.md
 
-      - name: Salvar arquivos no GitHub
+      - name: Restaurar recursos visuais locais
+        run: |
+          bash scripts/restore-public-assets.sh
+
+      - name: Salvar arquivos recuperados
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add src functions RECOVERY_NOTES.md
-
+          git add src functions RECOVERY_NOTES.md public scripts
           if ! git diff --cached --quiet; then
-            git commit -m "Add recovered application source"
-            git push
+            git commit -m "Restore recovered source and offline visual assets"
+            git push origin HEAD:offline-rebuild
           fi
