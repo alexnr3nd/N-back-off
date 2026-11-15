@@ -20,7 +20,7 @@ const defaults = () => ({
   classicProgression: { dual: { currentNBack: 2, currentDifficulty: 0.5 }, triple: { currentNBack: 2, currentDifficulty: 0.5 }, quad: { currentNBack: 2, currentDifficulty: 0.5 } },
   subscriptionTier: 'free', subscriptionStatus: 'free', freeTier: 'classic_legacy',
 });
-const today = () => new Date().toISOString().slice(0, 10);
+const today = (timezone) => new Intl.DateTimeFormat('en-CA', { timeZone: timezone || Intl.DateTimeFormat().resolvedOptions().timeZone }).format(new Date());
 
 export const UserProvider = ({ children }) => {
   const [store, setStore] = useState(() => loadProfileStore());
@@ -138,7 +138,8 @@ export const UserProvider = ({ children }) => {
   }, [userData, profileId, record, sessions, activeGameMode]);
   const profiles = useMemo(() => store.profiles.map(p => ({ ...p, username: p.name, sessions: p.sessions || [], ...(p.userData || {}) })), [store]);
   const totalSessions = sessions.length;
-  const todayAdaptive = sessions.filter(s => (s.trainingMode || s.mode) === 'adaptive' && new Date(s.createdAt || s.timestamp || 0).toISOString().slice(0,10) === today()).length;
+  const localTimezone = record.settings?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const todayAdaptive = sessions.filter(s => (s.trainingMode || s.mode) === 'adaptive' && today(localTimezone) === new Intl.DateTimeFormat('en-CA', { timeZone: localTimezone }).format(new Date(s.createdAt || s.timestamp || 0))).length;
 
   const value = useMemo(() => ({
     authUser: null, isAuthLoading: false, isAuthResolved: true, isAuthStale: false, isLocalMode: true,
@@ -156,7 +157,7 @@ export const UserProvider = ({ children }) => {
     checkSubscription: noOp, fetchPaginatedSessions, fetchAllSessionsForExport, fetchSessionsLightweight, updateSessionNote, updateDisplayNameLocally, updateCohortDisplayNameLocally, refreshUserData,
     isAdmin: false, isCoach: false, coachGrantedPremium: false, coachId: null, preMonetizationChange: false, rewardedProSessions, setRewardedProSessions,
     isAdaptiveUser: true, adaptiveGrandfatherExpiry: null, grandfatherDaysRemaining: null, subscriptionType: null, isPaidPro: false, isGrandfatheredActive: false, isFullAdaptive: false, hasClassicAccess: true, freeTier: 'classic_legacy',
-    dailyAdaptiveCount: Math.max(dailyAdaptiveCount, todayAdaptive), setDailyAdaptiveCount, dailyAdaptiveCountDate: today(), showDailyCapModal, setShowDailyCapModal, dailyCapInfo, setDailyCapInfo, pendingOfflineCapRejection: null, setPendingOfflineCapRejection: noOp,
+    dailyAdaptiveCount: Math.max(dailyAdaptiveCount, todayAdaptive), setDailyAdaptiveCount, dailyAdaptiveCountDate: today(localTimezone), showDailyCapModal, setShowDailyCapModal, dailyCapInfo, setDailyCapInfo, pendingOfflineCapRejection: null, setPendingOfflineCapRejection: noOp,
     lifetimeTrialStatus: null, setLifetimeTrialStatus: noOp, lifetimeTrialEndsAt: null, isInLifetimeTrial: false, lifetimeTrialDaysRemaining: 0,
     healthSafetyNotice: { loading: false, needsAck: false, notice: null, isFirstSession: totalSessions === 0, acknowledge: noOp, decline: noOp },
     addProfile, selectProfile, removeProfile, renameProfile, setProfileUsername: renameProfile,
