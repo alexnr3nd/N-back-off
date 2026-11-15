@@ -6,6 +6,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getFunctions } from 'firebase/functions';
+export { httpsCallable } from 'firebase/functions';
 
 export const isEmulatorEnv = true;
 export const isEmulatorEnvironment = true;
