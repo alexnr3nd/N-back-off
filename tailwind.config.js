@@ -15,6 +15,9 @@ module.exports = {
         border: 'rgb(var(--color-border) / <alpha-value>)',
         line: 'rgb(var(--color-line) / <alpha-value>)'
       },
+      'amber-accent': 'rgb(var(--color-accent) / <alpha-value>)',
+      'charcoal-hover': 'rgb(var(--color-bg-surface) / <alpha-value>)',
+      'warm-muted': 'rgb(var(--color-text-muted) / <alpha-value>)',
       neural: {
         blue: 'rgb(var(--color-neural-blue) / <alpha-value>)',
         red: 'rgb(var(--color-neural-red) / <alpha-value>)',
