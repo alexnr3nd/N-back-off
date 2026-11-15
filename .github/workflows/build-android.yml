@@ -62,7 +62,11 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           p = Path('android/app/src/main/AndroidManifest.xml')
+          import re
           s = p.read_text()
+          # Remove permissions already declared by the generated app manifest itself.
+          for permission in ('INTERNET', 'ACCESS_NETWORK_STATE'):
+              s = re.sub(r'<uses-permission\\b(?=[^>]*android:name="android.permission.' + permission + r'")[^>]*/>\\s*', '', s)
           s = s.replace('xmlns:android="http://schemas.android.com/apk/res/android"', 'xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"')
           rules = ('    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />\n'
                    '    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />\n')
