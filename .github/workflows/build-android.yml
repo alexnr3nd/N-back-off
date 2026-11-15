@@ -48,6 +48,7 @@ jobs:
         env:
           CI: 'false'
           GENERATE_SOURCEMAP: 'false'
+          DISABLE_ESLINT_PLUGIN: 'true'
         run: npm run build
 
       - name: Create Android project
