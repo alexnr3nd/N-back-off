@@ -19,7 +19,7 @@
  * Scope: single sessions only. Continuous-chain blocks stay server-only (they need
  * `bufferTrials` / `priorStimuli` primers, which this entry point does not expose).
  */
-import { buildSequenceResponse } from '../../functions/sequenceResponse';
+import { buildSequenceResponse } from '../functions/sequenceResponse';
 
 /**
  * Convert a CLIENT difficulty (0 - 0.99, the number stored on the profile and shown
