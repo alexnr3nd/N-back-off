@@ -305,7 +305,7 @@ const RootRedirect = () => {
     }
 
     // Simplified: logged in users go to dashboard, others go to login
-    const targetPath = authUser ? "/dashboard" : "/login";
+    const targetPath = "/dashboard";
     return <Navigate to={targetPath} replace />;
 };
 
