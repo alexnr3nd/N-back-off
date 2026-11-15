@@ -1,6 +1,9 @@
 name: Preparar codigo recuperado
 
 on:
+  push:
+    branches:
+      - offline-rebuild
   workflow_dispatch:
 
 permissions:
