@@ -307,7 +307,7 @@ export const UserProvider = ({ children }) => {
     profiles, fetchAllTimeData, error, userSubscriptionStatus, subscriptionTier,
     subscriptionPlatform, totalSessionsOverride, totalSessions, showFreeTrialOffer,
     showProTrialUpgradeModal, proTrialUpgradeModalTrigger, updateUpgradeModalStateLocally,
-    updateMarketingConsentLocally, isOnboardingComplete, updateProfileProgress,
+    updateMarketingConsentLocally, updateProfileProgress,
     markTutorialCompleted, addCstResult, markOnboardingComplete, fetchPaginatedSessions,
     fetchAllSessionsForExport, fetchSessionsLightweight, updateSessionNote,
     updateDisplayNameLocally, updateCohortDisplayNameLocally, refreshUserData,
