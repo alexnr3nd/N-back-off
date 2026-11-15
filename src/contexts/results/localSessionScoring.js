@@ -63,7 +63,7 @@ export const calculateLocalSessionResults = ({
   const average = key => active.length ? active.reduce((sum,type) => sum + scores[type][key],0) / active.length : 0;
   const overallDprime = average('dprime');
   const overallAccuracy = average('accuracy');
-  const range = DIFFICULTY_ADJUSTMENT_RANGE_OPTIONS.find(item => item.key === settings.difficultyAdjustmentRange)?.range
+  const range = DIFFICULTY_ADJUSTMENT_RANGE_OPTIONS.find(item => item.key === 'standard')?.range
     || DIFFICULTY_ADJUSTMENT_RANGE_OPTIONS[0].range;
   const thresholds = {
     excellentThreshold: DPRIME_THRESHOLDS_INTERPRETATION.EXCELLENT,
