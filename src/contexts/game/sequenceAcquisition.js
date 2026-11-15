@@ -129,6 +129,9 @@ export async function acquireSequence({
     now = Date.now,
     log = console,
 }) {
+    // OFFLINE BUILD: never request a remote sequence; use the recovered local generator.
+    return { response: generateLocallyOrThrow(generateLocally, null), source: 'local', reason: 'offline' };
+
     // --- 1. Cache (use-once, pre-fetched) ---
     if (typeof lookupCache === 'function') {
         const cached = await lookupCache();
