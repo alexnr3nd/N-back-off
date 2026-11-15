@@ -56,7 +56,7 @@ export const UserProvider = ({ children }) => {
 
   const updateProfileProgress = useCallback(async (_id, data = {}) => {
     if (!data || typeof data !== 'object') return false;
-    const mode = MODE_KEYS.includes(data.gameMode) ? data.gameMode : activeGameModeRef.current;
+    const mode = data.gameMode === 'singleColorRecall' || MODE_KEYS.includes(data.gameMode) ? data.gameMode : activeGameModeRef.current;
     const root = data.trainingMode === 'classic' ? 'classicProgression' : 'modeProgression';
     const modeKeys = ['currentNBack','currentDifficulty','highestNBack','consecutiveSuccesses','previousNBackLevelDifficulties','currentSubMode','promotionCredits'];
     const modePatch = {};
