@@ -38,10 +38,7 @@ const LocalSettingsPage = () => {
           <Toggle label="Feedback de erros" description="Mostra indicação visual para respostas incorretas." checked={settings.instantFeedbackErrors !== false} onChange={v=>updateSetting('instantFeedbackErrors',v)} />
           <Toggle label="Feedback de omissões" description="Indica quando um alvo não foi respondido." checked={settings.instantFeedbackMisses !== false} onChange={v=>updateSetting('instantFeedbackMisses',v)} />
           <Toggle label="Ocultar cursor automaticamente" description="Oculta o cursor durante o treino quando disponível." checked={!!settings.autoHideCursor} onChange={v=>updateSetting('autoHideCursor',v)} />
-          <label className="block text-sm mt-5 mb-2">Velocidade de ajuste de dificuldade</label>
-          <select value={settings.difficultyAdjustmentRange || 'standard'} onChange={e=>updateSetting('difficultyAdjustmentRange',e.target.value)} className="w-full p-3 rounded-lg bg-theme-bg border border-theme-line">
-            <option value="standard">Padrão</option><option value="accelerated">Acelerada</option><option value="aggressive">Agressiva</option>
-          </select>
+
         </section>
 
         <section className="bg-theme-bg-secondary border border-theme-line rounded-xl p-4 md:p-6">
