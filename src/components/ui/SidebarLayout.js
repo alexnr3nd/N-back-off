@@ -62,7 +62,46 @@ const SidebarLayout = () => {
     const [newestChangelogAt, setNewestChangelogAt] = useState(null);
     const [lastViewedAt, setLastViewedAt] = useState(() => localStorage.getItem(CHANGELOG_LAST_VIEWED_KEY));
 
-    // Remote changelog polling is disabled in the offline build.
+    // Fetch newest changelog timestamp on mount and poll periodically (for badge indicator)
+    useEffect(() => {
+        if (!authUser) return;
+
+        const checkChangelogs = async () => {
+            try {
+                const fn = httpsCallable(functions, 'getNewestChangelogTimestamp');
+                const result = await fn({});
+                if (result.data?.success) {
+                    setNewestChangelogAt(result.data.newestPublishedAt);
+                    // Sync localStorage with server's lastViewedChangelogAt
+                    if (result.data.lastViewedChangelogAt) {
+                        localStorage.setItem(CHANGELOG_LAST_VIEWED_KEY, result.data.lastViewedChangelogAt);
+                        setLastViewedAt(result.data.lastViewedChangelogAt);
+                    }
+                }
+            } catch (err) {
+                console.error('[SidebarLayout] Error checking changelogs:', err);
+            }
+        };
+
+        // Initial check
+        checkChangelogs();
+
+        // Poll every 2 minutes for new changelogs
+        const intervalId = setInterval(checkChangelogs, CHANGELOG_POLL_INTERVAL);
+
+        // Check immediately when tab becomes visible
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                checkChangelogs();
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            clearInterval(intervalId);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [authUser]);
 
     // Listen for changelog viewed event (dispatched by ChangelogPage)
     useEffect(() => {
@@ -99,7 +138,20 @@ const SidebarLayout = () => {
         return true;
     }, [activeCohort, userData?.programCohortSeen, programDismissedLocally]);
 
-    // Remote cohort synchronization is disabled in the offline build.
+    // Dismiss when user navigates to /program
+    useEffect(() => {
+        if (location.pathname === '/program' && hasNewProgram && activeCohort?.id) {
+            // Instant UI dismissal
+            setProgramDismissedLocally(true);
+            // Persist locally (survives refresh)
+            localStorage.setItem(`program_cohort_seen_${activeCohort.id}`, new Date().toISOString());
+            // Fire-and-forget Firestore sync for cross-device
+            const fn = httpsCallable(functions, 'markProgramCohortSeen');
+            fn({ cohortId: activeCohort.id }).catch(err =>
+                console.error('[SidebarLayout] Failed to sync program cohort seen:', err)
+            );
+        }
+    }, [location.pathname, hasNewProgram, activeCohort?.id]);
 
     // --- Assessment "New" Dot State ---
     const hasNewAssessment = useMemo(() => {
@@ -400,7 +452,6 @@ const SidebarLayout = () => {
                                  </span>
                              )}
                          </button>
-                         <NavLink path="/profiles" icon={faUsers} label="Perfis" collapsed={isSidebarCollapsed} />
                          <NavLink path="/settings" icon={faSliders} label="Settings" collapsed={isSidebarCollapsed} />
                     </nav>
                 </div>
