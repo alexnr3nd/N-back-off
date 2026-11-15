@@ -87,7 +87,7 @@ import PasswordReset from './components/auth/PasswordReset';
 import PasswordActionHandler from './components/auth/PasswordActionHandler';
 // Removed: ProfileSelectionScreen, WelcomeSetup, UsernameOnboardingScreen (multi-profile feature removed)
 // Removed: AccountPage (merged into SettingsPage)
-import SettingsPage from './components/settings/SettingsPage';
+import LocalSettingsPage from './components/LocalSettingsPage';
 import LocalProfilesPage from './components/LocalProfilesPage';
 import DeleteAccountPage from './components/account/DeleteAccountPage';
 import AllSessionsPage from './components/sessions/AllSessionsPage'; // <<<--- ADDED IMPORT
@@ -465,7 +465,7 @@ const router = createBrowserRouter([
                             // Removed: /profile-selection (multi-profile feature removed)
                             // Account route now redirects to Settings (Account merged into Settings)
                             { path: "/account", element: <Navigate to="/settings" replace /> },
-                            { path: "/settings", element: <SettingsPage /> },
+                            { path: "/settings", element: <LocalSettingsPage /> },
                             { path: "/profiles", element: <LocalProfilesPage /> },
                             // Core App Features: Need login & active sub (checked by AuthGuard)
                             { path: "/dashboard", element: <ProfileDashboard /> },
