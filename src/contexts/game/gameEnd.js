@@ -593,6 +593,13 @@ export function createEndGameAction({
                          durationMs: fetchedBackendResults.durationMs ?? 0,
                          newDifficulty: fetchedBackendResults.newDifficulty ?? 0,
                          newNBack: fetchedBackendResults.newNBack ?? 2,
+                         sessionData: sessionDataForPayload,
+                         replayData: replayData || null,
+                         visualResponses: visualResponsesPlayed,
+                         audioResponses: audioResponsesPlayed,
+                         colorResponses: colorResponsesPlayed,
+                         shapeResponses: shapeResponsesPlayed,
+                         responseTimes: responseTimes || [],
                      });
                  }
             } else {
