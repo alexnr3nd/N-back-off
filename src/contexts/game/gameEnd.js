@@ -434,6 +434,7 @@ export function createEndGameAction({
                             previousNBackLevelDifficulties: newPreviousDifficulties,
                             // Dynamic mode: update sub-mode from backend results
                             ...(fetchedBackendResults.newSubMode && { currentSubMode: fetchedBackendResults.newSubMode }),
+                            ...(typeof fetchedBackendResults.newPromotionCredits === 'number' && { promotionCredits: fetchedBackendResults.newPromotionCredits }),
                             // Route to classicProgression vs modeProgression based on session's trainingMode
                             ...(settingsFromSession?.trainingMode && { trainingMode: settingsFromSession.trainingMode }),
                             // Recall sessions progress the 'singleColorRecall' track. Without this the
