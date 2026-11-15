@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'build',
   server: { androidScheme: 'https' },
   plugins: {
-    SplashScreen: { launchShowDuration: 0 },
+    SplashScreen: { launchShowDuration: 2500, launchAutoHide: true },
     StatusBar: { overlaysWebView: false }
   }
 };
