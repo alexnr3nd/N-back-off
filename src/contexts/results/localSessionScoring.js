@@ -96,6 +96,7 @@ export const calculateLocalSessionResults = ({
     totalTrials: sessionData.trialsCompleted || sequence.length,
     durationMs, newNBack: progression.newNBack, newDifficulty: progression.newDifficulty,
     newConsecutiveSuccesses: progression.newConsecutiveSuccesses,
+    newPromotionCredits: progression.newPromotionCredits || 0,
     difficultyAdjustment: progression.difficultyAdjustment || 0,
     totalSessions: totalSessions + 1, showReport: sessionData.showReport !== false,
     isPartialResult: sessionData.isPartialResult === true,
