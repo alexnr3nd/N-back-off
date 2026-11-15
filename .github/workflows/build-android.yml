@@ -92,6 +92,38 @@ jobs:
             exit 1
           fi
 
+      - name: Smoke test on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -camera-back none
+          script: |
+            adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+            adb shell am force-stop com.dualnback.android
+            adb shell monkey -p com.dualnback.android 1
+            sleep 20
+            adb shell pidof com.dualnback.android
+            adb shell dumpsys activity activities | grep -E 'mResumedActivity|topResumedActivity'
+            mkdir -p /tmp/dual-n-back-smoke
+            adb exec-out screencap -p > /tmp/dual-n-back-smoke/startup.png
+            adb logcat -d -t 12000 > /tmp/dual-n-back-smoke/logcat.txt
+            if grep -E 'FATAL EXCEPTION|Process: com.dualnback.android' /tmp/dual-n-back-smoke/logcat.txt; then
+              echo 'App crashed during startup'
+              exit 1
+            fi
+
+      - name: Upload emulator startup evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dual-n-back-emulator-startup-evidence
+          path: /tmp/dual-n-back-smoke/
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
