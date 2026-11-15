@@ -65,10 +65,10 @@ jobs:
           p = Path('android/app/src/main/AndroidManifest.xml')
           s = p.read_text()
           for permission in ('INTERNET', 'ACCESS_NETWORK_STATE'):
-              s = re.sub(r'<uses-permission\\b(?=[^>]*android:name="android.permission.' + permission + r'")[^>]*/>\\s*', '', s)
+              s = re.sub(r'<uses-permission\b(?=[^>]*android:name="android.permission.' + permission + r'")[^>]*/>\s*', '', s)
           s = s.replace('xmlns:android="http://schemas.android.com/apk/res/android"', 'xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"')
-          rules = ('    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />\\n'
-                   '    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />\\n')
+          rules = ('    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />\n'
+                   '    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />\n')
           if 'tools:node="remove"' not in s:
               s = s.replace('<application', rules + '    <application', 1)
           p.write_text(s)
@@ -87,6 +87,9 @@ jobs:
           APK=android/app/build/outputs/apk/debug/app-debug.apk
           "$ANDROID_HOME/build-tools/36.0.0/aapt" dump permissions "$APK" | tee /tmp/apk-permissions.txt
           ! grep -qE 'android.permission.(INTERNET|ACCESS_NETWORK_STATE)' /tmp/apk-permissions.txt
+
+      - name: Install screenshot inspection dependency
+        run: python3 -m pip install --user --break-system-packages pillow
 
       - name: Smoke test on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -111,7 +114,7 @@ jobs:
             import re
             from PIL import Image
             log = Path('/tmp/dual-n-back-smoke/logcat.txt').read_text(errors='replace')
-            if re.search(r'FATAL EXCEPTION|Process: com\\.dualnback\\.android', log):
+            if re.search(r'FATAL EXCEPTION|Process: com\.dualnback\.android', log):
                 raise SystemExit('App crashed during startup')
             im = Image.open('/tmp/dual-n-back-smoke/startup.png').convert('RGB')
             colors = im.getcolors(im.width * im.height) or []
