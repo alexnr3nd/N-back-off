@@ -281,7 +281,7 @@ export const GameProvider = ({ children }) => {
     const chainEndedByDailyCapRef = useRef(false);
 
     // --- External Contexts ---
-    const { userId, isDataReady, getCurrentModeProgression, getClassicModeProgression, updateProfileProgress, addLocalSession, subscriptionTier, coachGrantedPremium, activeGameMode, setTotalSessions, setDailyAdaptiveCount, setShowDailyCapModal, setDailyCapInfo, validateAuthToken } = useUser();
+    const { userId, activeProfileId, isDataReady, getCurrentModeProgression, getClassicModeProgression, updateProfileProgress, addLocalSession, subscriptionTier, coachGrantedPremium, activeGameMode, setTotalSessions, setDailyAdaptiveCount, setShowDailyCapModal, setDailyCapInfo, validateAuthToken } = useUser();
     const { settings } = useSettings(); // settings is available here
     // The sequence "language" (backend letter-set key AND sequence-cache key component).
     // Derived once, as a plain string, so downstream memos depend on the VALUE rather than
@@ -305,10 +305,10 @@ export const GameProvider = ({ children }) => {
     // Build a profile-like object for sub-modules (gameSetup, gameEnd) that still expect the old interface
     // This provides mode-specific progression values with userId as the id
     const modeProgressionData = useMemo(() => {
-        if (!isDataReady || !userId) return null;
+        if (!isDataReady || !activeProfileId) return null;
         const modeProgress = getCurrentModeProgression();
         return {
-            id: userId,
+            id: activeProfileId,
             currentNBack: modeProgress.currentNBack,
             currentDifficulty: modeProgress.currentDifficulty,
             consecutiveSuccesses: modeProgress.consecutiveSuccesses,
@@ -321,7 +321,7 @@ export const GameProvider = ({ children }) => {
             // makes the track reachable from the profile-shaped object those modules take.
             recallProgression: getCurrentModeProgression('singleColorRecall'),
         };
-    }, [isDataReady, userId, getCurrentModeProgression]);
+    }, [isDataReady, activeProfileId, getCurrentModeProgression]);
 
     // --- Initialization Effects ---
     useEffect(() => { audioManager.init(); }, []);
