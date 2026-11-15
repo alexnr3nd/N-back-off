@@ -9,6 +9,26 @@ mkdir -p public
 # references. Extract only the assets; public/index.html is maintained locally.
 unzip -oq dualnback_visual_assets.zip -d public -x index.html
 
+# Restore original CSS source files from the production source maps. This keeps
+# the recovered project editable while all runtime CSS/font assets remain local.
+python3 - <<'PY'
+import json
+from pathlib import Path
+
+for source_map in Path("public/static/css").glob("*.css.map"):
+    data = json.loads(source_map.read_text(encoding="utf-8"))
+    for source, content in zip(data.get("sources", []), data.get("sourcesContent", [])):
+        prefix = "webpack://dual-n-back-app/./"
+        if not content or not source.startswith(prefix):
+            continue
+        relative = source[len(prefix):]
+        if relative.startswith("src/") and relative.endswith(".css"):
+            target = Path(relative)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(content, encoding="utf-8")
+            print(f"Restored {target}")
+PY
+
 mkdir -p src/assets/icar/matrix src/assets/icar/rotation
 cp public/static/media/MX45.b5ffff80acbb6ab09307.jpg src/assets/icar/matrix/MX45.jpg
 cp public/static/media/MX46.51104df819dc452b5598.jpg src/assets/icar/matrix/MX46.jpg
@@ -19,4 +39,4 @@ cp public/static/media/R3D04.e87850ad16e59d4e9bca.jpg src/assets/icar/rotation/R
 cp public/static/media/R3D06.7d20d375b2769cb503a6.jpg src/assets/icar/rotation/R3D06.jpg
 cp public/static/media/R3D08.bec0255e5b90bc8394a5.jpg src/assets/icar/rotation/R3D08.jpg
 
-echo "Public visual assets and ICAR source images restored."
+echo "Public assets, CSS source files and ICAR images restored."
