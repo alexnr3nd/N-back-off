@@ -70,7 +70,7 @@ export const calculateLocalSessionResults = ({
     goodThreshold: DPRIME_THRESHOLDS_INTERPRETATION.GOOD,
     fairThreshold: DPRIME_THRESHOLDS_INTERPRETATION.FAIR,
   };
-  const currentMode = activeProfile?.modeProgression?.[gameMode] || activeProfile || {};
+  const currentMode = gameMode === 'singleColorRecall' ? (activeProfile?.recallProgression || activeProfile || {}) : (activeProfile?.modeProgression?.[gameMode] || activeProfile || {});
   let progression = { newNBack: nBack, newDifficulty: difficulty, newConsecutiveSuccesses: currentMode.consecutiveSuccesses || 0, difficultyAdjustment: 0 };
   if (sessionData.saveToProfile && sessionData.trainingMode !== 'classic') {
     progression = determineProgression({
