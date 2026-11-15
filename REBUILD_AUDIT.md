@@ -34,6 +34,13 @@ Target: Dual N-Back 1.1.60 (Capacitor appId `com.dualnback.android`)
 5. Disconnect Firebase, App Check/reCAPTCHA, analytics/Sentry, RevenueCat, and account/payment screens only after their call sites are safely replaced.
 6. Verify the app starts and runs in airplane mode; test each retained game mode, persistence, profile isolation, and backup/restore.
 
+## Work completed in this pass
+
+- Added an offline-safe `public/index.html` without analytics, reCAPTCHA, or remote CDN script tags.
+- Added `scripts/restore-public-assets.sh` and updated the manual recovery workflow to unpack local CSS/media/icons, recover editable CSS from source maps, and restore all eight ICAR figures to the import paths expected by the source.
+- Restored the missing `src/contexts/gameUtils.js` compatibility module by re-exporting the existing game helper/feedback functions.
+- Removed three imports that were unused and pointed to unavailable components; this reduces avoidable missing-module build failures without changing rendered UI.
+
 ## Current status
 
-Inputs are present and audited. No offline behavior has been implemented and no APK has been built or tested yet. Do not describe the app as offline-ready until the full verification above passes.
+The recovery/asset preparation path is now in the repository, but it has not yet been executed by GitHub Actions after these changes. The project still has no dependency manifest/lockfile or Android project, and Firebase/authentication/subscription code remains active. No APK has been built or tested. Do not describe the app as offline-ready until the full verification above passes.
