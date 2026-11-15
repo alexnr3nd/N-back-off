@@ -64,7 +64,8 @@ jobs:
           p = Path('android/app/src/main/AndroidManifest.xml')
           s = p.read_text()
           s = s.replace('xmlns:android="http://schemas.android.com/apk/res/android"', 'xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"')
-          rules = '    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />\\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />\\n'
+          rules = ('    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />\n'
+                   '    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />\n')
           if 'tools:node="remove"' not in s:
               s = s.replace('<application', rules + '    <application', 1)
           p.write_text(s)
@@ -77,6 +78,15 @@ jobs:
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
+
+      - name: Verify final APK has no network permissions
+        run: |
+          APK=android/app/build/outputs/apk/debug/app-debug.apk
+          "$ANDROID_HOME/build-tools/36.0.0/aapt" dump permissions "$APK" | tee /tmp/apk-permissions.txt
+          if grep -E 'android.permission.(INTERNET|ACCESS_NETWORK_STATE)' /tmp/apk-permissions.txt; then
+            echo 'Unexpected network permission found in final APK'
+            exit 1
+          fi
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
