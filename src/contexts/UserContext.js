@@ -5,7 +5,7 @@ import { loadProfileStore, saveProfileStore, createLocalProfile, renameLocalProf
 import { MODE_KEYS } from '../constants/modeStyles';
 export { useUser, useProfile };
 
-const progression = () => ({ currentNBack: 2, currentDifficulty: 0, highestNBack: 2, consecutiveSuccesses: 0, previousNBackLevelDifficulties: {} });
+const progression = () => ({ currentNBack: 2, currentDifficulty: 0, highestNBack: 2, consecutiveSuccesses: 0, previousNBackLevelDifficulties: {}, promotionCredits: 0 });
 const defaults = () => ({
   displayName: null, currentNBack: 2, currentDifficulty: 0, highestNBack: 2, consecutiveSuccesses: 0,
   tutorialsCompleted: {}, cstHistory: [], reasoningCheckHistory: [], cstFamiliarizationCount: 0,
@@ -58,7 +58,7 @@ export const UserProvider = ({ children }) => {
     if (!data || typeof data !== 'object') return false;
     const mode = MODE_KEYS.includes(data.gameMode) ? data.gameMode : activeGameModeRef.current;
     const root = data.trainingMode === 'classic' ? 'classicProgression' : 'modeProgression';
-    const modeKeys = ['currentNBack','currentDifficulty','highestNBack','consecutiveSuccesses','previousNBackLevelDifficulties','currentSubMode'];
+    const modeKeys = ['currentNBack','currentDifficulty','highestNBack','consecutiveSuccesses','previousNBackLevelDifficulties','currentSubMode','promotionCredits'];
     const modePatch = {};
     for (const key of modeKeys) {
       if (!Object.prototype.hasOwnProperty.call(data, key)) continue;
