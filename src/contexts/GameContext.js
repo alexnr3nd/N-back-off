@@ -321,8 +321,9 @@ export const GameProvider = ({ children }) => {
             // the Recall response-mode setting, outside continuous chains); this just
             // makes the track reachable from the profile-shaped object those modules take.
             recallProgression: getCurrentModeProgression('singleColorRecall'),
+            classicProgression: getClassicModeProgression(),
         };
-    }, [isDataReady, activeProfileId, getCurrentModeProgression]);
+    }, [isDataReady, activeProfileId, getCurrentModeProgression, getClassicModeProgression]);
 
     // --- Initialization Effects ---
     useEffect(() => { audioManager.init(); }, []);
