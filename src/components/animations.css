@@ -1,0 +1,75 @@
+/* src/components/animations.css */
+
+/* Animation utilities for expandable rows */
+.animated {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+}
+
+/* Animation for row expansion */
+@keyframes expandRow {
+  from { max-height: 0; opacity: 0; }
+  to { max-height: 500px; opacity: 1; }
+}
+
+.expand-row {
+  animation: expandRow 0.3s ease-out forwards;
+  overflow: hidden;
+}
+
+/* Animation for row collapse */
+@keyframes collapseRow {
+  from { max-height: 500px; opacity: 1; }
+  to { max-height: 0; opacity: 0; }
+}
+
+.collapse-row {
+  animation: collapseRow 0.3s ease-in forwards;
+  overflow: hidden;
+}
+
+/* Color transitions */
+.transition-colors {
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* 
+ * NEW ANIMATIONS FOR WEEKLY TRACKER
+ * The following animations are used for the weekly tracker component
+ */
+
+/* Subtle pulse animation for completed day circles */
+@keyframes pulse-slight {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.animate-pulse-slight {
+  animation: pulse-slight 2s ease-in-out infinite;
+}
+
+/* Fade-in animation for the indicator dots */
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(3px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+/* Subtle opacity pulse for today's highlight */
+@keyframes pulse-fade-slight {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+.animate-pulse-fade-slight {
+  animation: pulse-fade-slight 1.5s ease-in-out infinite;
+}

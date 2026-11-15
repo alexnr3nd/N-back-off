@@ -1,0 +1,23 @@
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="1200" fill="#151311"/>
+
+  <!-- Echo/shadow square - the memory trace -->
+  <rect
+    x="520" y="520"
+    width="400" height="400"
+    rx="48"
+    fill="none"
+    stroke="#E4B85C"
+    stroke-width="24"
+    opacity="0.4"
+  />
+
+  <!-- Primary square - the current moment -->
+  <rect
+    x="280" y="280"
+    width="400" height="400"
+    rx="48"
+    fill="#E4B85C"
+  />
+</svg>

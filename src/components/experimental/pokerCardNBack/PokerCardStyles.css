@@ -1,0 +1,266 @@
+/* src/components/experimental/pokerCardNBack/PokerCardStyles.css */
+
+/* Card Container and Perspective Setup */
+.card-container {
+    position: relative;
+    perspective: 1000px;
+    width: 220px;
+    height: 300px;
+    margin: 0 auto;
+  }
+  
+  /* Card Deck Styling (decorative) */
+  .card-deck {
+    position: absolute;
+    width: 220px;
+    height: 300px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    z-index: 1;
+    transform: translateZ(-10px) translateX(4px) translateY(4px);
+    background-image: linear-gradient(to bottom, #e0e0e0, #ffffff);
+    border: 1px solid #ddd;
+  }
+  
+  .card-deck::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.03) 5px, rgba(0,0,0,0.03) 10px);
+    border-radius: 10px;
+  }
+  
+  /* Playing Card Base Styling - SIMPLIFIED ANIMATION */
+  .playing-card {
+    width: 220px;
+    height: 300px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    z-index: 2;
+  }
+  
+  /* Single flip animation from back to front or front to back */
+  .playing-card.face-up {
+    transform: rotateY(180deg);
+  }
+  
+  .playing-card.face-down {
+    transform: rotateY(0);
+  }
+  
+  /* Inner container for 3D effect */
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+  }
+  
+  /* Card Front and Back Base Styles */
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+  
+  /* Card Front Styling */
+  .card-front {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transform: rotateY(180deg); /* Always rotated 180deg */
+  }
+  
+  /* Card Back Styling */
+  .card-back {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    transform: rotateY(0deg); /* Not rotated */
+  }
+  
+  /* Card Back Pattern */
+  .card-back-pattern {
+    width: 100%;
+    height: 100%;
+    background-color: #1e40af; /* Indigo background */
+    background-image: 
+      repeating-linear-gradient(45deg, 
+        rgba(255, 255, 255, 0.1) 0px, 
+        rgba(255, 255, 255, 0.1) 10px, 
+        transparent 10px, 
+        transparent 20px),
+      repeating-linear-gradient(-45deg, 
+        rgba(255, 255, 255, 0.1) 0px, 
+        rgba(255, 255, 255, 0.1) 10px, 
+        transparent 10px, 
+        transparent 20px);
+    border-radius: 8px;
+  }
+  
+  /* Card Corner Styles */
+  .card-corner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+  
+  .top-left {
+    top: 5px;
+    left: 5px;
+    text-align: left;
+  }
+  
+  .bottom-right {
+    bottom: 5px;
+    right: 5px;
+    transform: rotate(180deg);
+  }
+  
+  .corner-rank {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .corner-suit {
+    font-size: 24px;
+    line-height: 1;
+  }
+  
+  /* Card Center Style */
+  .card-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .center-rank {
+    font-size: 72px;
+    font-weight: bold;
+    line-height: 1;
+  }
+  
+  .center-suit {
+    font-size: 72px;
+    line-height: 1;
+  }
+  
+  /* Card Feedback Animations */
+  .suit-correct-feedback {
+    animation: pulseGreen 0.5s;
+  }
+  
+  .suit-incorrect-feedback {
+    animation: pulseRed 0.5s;
+  }
+  
+  .suit-missed-feedback {
+    animation: pulseYellow 0.5s;
+  }
+  
+  .rank-correct-feedback {
+    animation: glowGreen 0.5s;
+  }
+  
+  .rank-incorrect-feedback {
+    animation: glowRed 0.5s;
+  }
+  
+  .rank-missed-feedback {
+    animation: glowYellow 0.5s;
+  }
+  
+  /* Animation Keyframes */
+  @keyframes pulseGreen {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    50% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0.7); }
+  }
+  
+  @keyframes pulseRed {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0.7); }
+  }
+  
+  @keyframes pulseYellow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    50% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0.7); }
+  }
+  
+  @keyframes glowGreen {
+    0%, 100% { border-color: #e0e0e0; }
+    50% { border-color: #10b981; border-width: 2px; }
+  }
+  
+  @keyframes glowRed {
+    0%, 100% { border-color: #e0e0e0; }
+    50% { border-color: #ef4444; border-width: 2px; }
+  }
+  
+  @keyframes glowYellow {
+    0%, 100% { border-color: #e0e0e0; }
+    50% { border-color: #f59e0b; border-width: 2px; }
+  }
+  
+  /* Trial Indicator Styles */
+  .trial-indicator {
+    font-family: sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Responsive adjustments for smaller screens */
+  @media (max-width: 640px) {
+    .card-container {
+      width: 180px;
+      height: 250px;
+    }
+    
+    .card-deck {
+      width: 180px;
+      height: 250px;
+    }
+    
+    .playing-card {
+      width: 180px;
+      height: 250px;
+    }
+    
+    .corner-rank {
+      font-size: 20px;
+    }
+    
+    .corner-suit {
+      font-size: 20px;
+    }
+    
+    .center-rank {
+      font-size: 60px;
+    }
+    
+    .center-suit {
+      font-size: 60px;
+    }
+  }
+  
+  /* Add some perspective to container for 3D effect */
+  .perspective-500 {
+    perspective: 500px;
+    transform-style: preserve-3d;
+  }
