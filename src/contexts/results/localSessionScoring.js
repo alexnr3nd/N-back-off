@@ -72,7 +72,7 @@ export const calculateLocalSessionResults = ({
   };
   const currentMode = gameMode === 'singleColorRecall' ? (activeProfile?.recallProgression || activeProfile || {}) : (activeProfile?.modeProgression?.[gameMode] || activeProfile || {});
   let progression = { newNBack: nBack, newDifficulty: difficulty, newConsecutiveSuccesses: currentMode.consecutiveSuccesses || 0, difficultyAdjustment: 0 };
-  if (sessionData.saveToProfile && sessionData.trainingMode !== 'classic') {
+  if (sessionData.saveToProfile && !sessionData.isPartialResult && sessionData.trainingMode !== 'classic') {
     progression = determineProgression({
       overallDprime, thresholds, nBack,
       difficulty, consecutiveSuccesses: currentMode.consecutiveSuccesses || 0,
@@ -93,7 +93,7 @@ export const calculateLocalSessionResults = ({
     misses: active.reduce((sum,type) => sum + scores[type].misses,0),
     falseAlarms: active.reduce((sum,type) => sum + scores[type].falseAlarms,0),
     correctRejections: active.reduce((sum,type) => sum + scores[type].correctRejections,0),
-    totalTrials: sessionData.trialsCompleted || sequence.length,
+    totalTrials: sessionData.trialsCompleted ?? sequence.length,
     durationMs, newNBack: progression.newNBack, newDifficulty: progression.newDifficulty,
     newConsecutiveSuccesses: progression.newConsecutiveSuccesses,
     newPromotionCredits: progression.newPromotionCredits || 0,
