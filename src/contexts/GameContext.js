@@ -312,6 +312,7 @@ export const GameProvider = ({ children }) => {
             currentNBack: modeProgress.currentNBack,
             currentDifficulty: modeProgress.currentDifficulty,
             consecutiveSuccesses: modeProgress.consecutiveSuccesses,
+            promotionCredits: modeProgress.promotionCredits || 0,
             highestNBack: modeProgress.highestNBack,
             previousNBackLevelDifficulties: modeProgress.previousNBackLevelDifficulties || {},
             currentSubMode: modeProgress.currentSubMode,
