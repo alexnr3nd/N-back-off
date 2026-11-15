@@ -8,6 +8,7 @@ import { isFirestoreBroken } from '../../utils/firestoreRecovery';
 import { trackEvent } from '../../utils/analyticsTracker';
 import { isRecoveryReloadArmed, holdRecoveryReload } from '../../utils/appCheckHealth';
 import { DAILY_ADAPTIVE_CAP } from '../../constants/gameConstants';
+import { calculateLocalSessionResults } from '../results/localSessionScoring';
 
 // When the App Check SDK is wedged the save is queued and appCheckHealth arms a reload
 // (fires once the dashboard is up). The overlay stays up with an honest message until
@@ -369,10 +370,20 @@ export function createEndGameAction({
             }
 
             try {
-                 if (!auth.currentUser) throw new Error("User not authenticated.");
-                 // Use httpsCallable (App Check enforced). The SDK attaches the App Check
-                 // token and auth automatically — no manual header construction needed.
-                 fetchedBackendResults = await calculateAndSaveResultsCall(payload);
+                 // Offline-first save: calculate results locally and persist them in the
+                 // active profile. No Firebase/Auth/Cloud Function call is made.
+                 fetchedBackendResults = calculateLocalSessionResults({
+                     sessionData: sessionDataForPayload,
+                     visualResponses: visualResponsesPlayed,
+                     audioResponses: audioResponsesPlayed,
+                     colorResponses: colorResponsesPlayed,
+                     shapeResponses: shapeResponsesPlayed,
+                     activeProfile,
+                     settings: settingsFromSession,
+                     sessionId: clientSessionId,
+                     totalSessions: activeProfile?.sessions?.length || 0,
+                     durationMs: Math.max(0, endTime - startTime),
+                 });
                 const saveLatencyMs = Date.now() - backendCallStart;
                 // Hide loading immediately after backend success - don't wait for profile update
                 if (typeof hideLoading === 'function') {
