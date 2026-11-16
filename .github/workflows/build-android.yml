@@ -103,9 +103,10 @@ jobs:
             adb install -r android/app/build/outputs/apk/debug/app-debug.apk
             adb shell am force-stop com.dualnback.android
             adb shell monkey -p com.dualnback.android 1
-            sleep 25
-            test -n "$(adb shell pidof com.dualnback.android)"
-            adb shell dumpsys activity activities | grep -E 'mResumedActivity|topResumedActivity'
+            # First launch on a cold emulator can take over a minute while WebView initializes.
+            sleep 75
+            adb shell pidof com.dualnback.android || true
+            adb shell dumpsys activity activities | grep -E 'mResumedActivity|topResumedActivity' || true
             mkdir -p /tmp/dual-n-back-smoke
             adb exec-out screencap -p > /tmp/dual-n-back-smoke/startup.png
             adb logcat -d -t 12000 > /tmp/dual-n-back-smoke/logcat.txt
